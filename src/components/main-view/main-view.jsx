@@ -11,12 +11,24 @@ export const MainView = () => {
         fetch("https://movie-flix19-efb939257bd3.herokuapp.com/movies")
             .then((response) => response.json())
             .then((data) => {
-                const moviesFromApi = data.docs.map((doc) => {
+                console.log(data);
+                const moviesFromApi = data.map((movie) => {
                     return {
-                        id: doc.key,
-                        title: doc.title,
-                        image: doc.image,
-                        director: doc.director?.[0]
+                        id: movie._id,                                  // Unique identifier
+                        title: movie.title,                             // Title of the movie
+                        description: movie.description,                 // Description of the movie
+                        imagePath: movie.imagePath,                     // Path to the movie image
+                        featured: movie.featured,                       // Featured status
+                        genre: {
+                            name: movie.genre.name,                    // Genre name
+                            description: movie.genre.description       // Genre description
+                        },
+                        director: {
+                            name: movie.director.name,                  // Director's name
+                            bio: movie.director.bio,                    // Director's bio
+                            birthdate: movie.director.birthdate,      // Director's birthdate
+                            deathdate: movie.director.deathdate        // Director's deathdate
+                        }
                     };
                 });
 
