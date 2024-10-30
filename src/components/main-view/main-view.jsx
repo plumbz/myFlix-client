@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
+import { LoginView } from "../login-view/login-view";
+import { SignupView } from "../signup-view/signup-view";
 
 export const MainView = () => {
     const [movies, setMovies] = useState([]);
-
     const [selectedMovie, setSelectedMovie] = useState(null);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         fetch("https://movie-flix19-efb939257bd3.herokuapp.com/movies")
@@ -36,6 +38,19 @@ export const MainView = () => {
             });
     }, []);
 
+    if (!user) {
+        return (
+            <>
+                <LoginView onLoggedIn={(user, token) => {
+                    setUser(user);
+                    setToken(token);
+                }} />
+                or
+                <SignupView />
+            </>
+        );
+    }
+
     if (selectedMovie) {
         return (
             <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
@@ -48,15 +63,24 @@ export const MainView = () => {
 
     return (
         <div>
-            {movies.map((movie) => (
-                <MovieCard
-                    key={movie.id}
-                    movie={movie}
-                    onMovieClick={(newSelectedMovie) => {
-                        setSelectedMovie(newSelectedMovie);
-                    }}
-                />
-            ))}
+            <div>
+                {movies.map((movie) => (
+                    <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        onMovieClick={(newSelectedMovie) => {
+                            setSelectedMovie(newSelectedMovie);
+                        }}
+                    />
+                ))}
+            </div>
+            <button
+                onClick={() => {
+                    setUser(null);
+                }}
+            >
+                Logout
+            </button>
         </div>
     );
 }
