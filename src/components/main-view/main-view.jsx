@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
@@ -71,8 +72,9 @@ export const MainView = () => {
             ) : (
                 <>
                     {movies.map((movie) => (
-                        <Col key={movie.id} md={3}>
+                        <Col className="mb-5" key={movie.id} md={3}>
                             <MovieCard
+                                className="w-100"
                                 movie={movie}
                                 onMovieClick={(newSelectedMovie) => {
                                     setSelectedMovie(newSelectedMovie);
@@ -80,9 +82,22 @@ export const MainView = () => {
                             />
                         </Col>
                     ))}
+
+                    <Col md={12} className="text-center mt-3"> {/* Center the button below movies */}
+                        <Button
+                            onClick={() => {
+                                setUser(null);
+                                setToken(null);
+                                localStorage.clear();
+                            }}
+                            className="logout-button"
+                        >
+                            Logout
+                        </Button>
+                    </Col>
+
                 </>
             )}
-            <button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</button>
         </Row>
     );
 };
