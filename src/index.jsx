@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client";
 import { MainView } from "./components/main-view/main-view";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Container from 'react-bootstrap/Container';
 
 import "./index.scss";
@@ -8,7 +7,7 @@ import "./index.scss";
 const MyFlixApplication = () => {
     return (
 
-        <Container style={{ border: "1px solid red" }}>
+        <Container>
             <MainView />
         </Container>
     );
