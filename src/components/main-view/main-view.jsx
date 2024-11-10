@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Container from 'react-bootstrap/Container';
 import Row from "react-bootstrap/Row";
 import Col from 'react-bootstrap/Col';
@@ -47,10 +49,18 @@ export const MainView = () => {
             });
     }, [token]);
 
+    const handleLogout = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("token"); // Remove the token from local storage (if stored there)
+    };
 
     return (
         <Container>
             <BrowserRouter>
+                <NavigationBar user={user} onLoggedOut={handleLogout} /> {/* Render NavigationBar here */}
+
+
                 <Row className="justify-content-md-center">
                     <Routes>
                         <Route
@@ -113,7 +123,20 @@ export const MainView = () => {
                                                 <Col className="mb-4" key={movie.id} md={3}>
                                                     <MovieCard movie={movie} />
                                                 </Col>
+
                                             ))}
+                                            <Col md={12} className="text-center mt-3"> {/* Center the button below movies */}
+                                                <Button
+                                                    onClick={() => {
+                                                        setUser(null);
+                                                        setToken(null);
+                                                        localStorage.clear();
+                                                    }}
+                                                    className="logout-button"
+                                                >
+                                                    Logout
+                                                </Button>
+                                            </Col>
                                         </>
                                     )}
                                 </>
