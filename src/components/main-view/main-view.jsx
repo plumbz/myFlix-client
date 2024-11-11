@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
+// import { UserProfile } from "./UserProfile";
 import Container from 'react-bootstrap/Container';
 import Row from "react-bootstrap/Row";
 import Col from 'react-bootstrap/Col';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+
 export const MainView = () => {
-    const [movies, setMovies] = useState([]);
-    const [user, setUser] = useState(null);
+    const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
+    const [movies, setMovies] = useState([]);
+    const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
 
     useEffect(() => {
@@ -125,18 +127,6 @@ export const MainView = () => {
                                                 </Col>
 
                                             ))}
-                                            <Col md={12} className="text-center mt-3"> {/* Center the button below movies */}
-                                                <Button
-                                                    onClick={() => {
-                                                        setUser(null);
-                                                        setToken(null);
-                                                        localStorage.clear();
-                                                    }}
-                                                    className="logout-button"
-                                                >
-                                                    Logout
-                                                </Button>
-                                            </Col>
                                         </>
                                     )}
                                 </>
