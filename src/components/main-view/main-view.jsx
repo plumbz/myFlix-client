@@ -4,7 +4,7 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
-// import { UserProfile } from "./UserProfile";
+import { UserProfile } from "../profile-view/profile-view";
 import Container from 'react-bootstrap/Container';
 import Row from "react-bootstrap/Row";
 import Col from 'react-bootstrap/Col';
@@ -55,6 +55,7 @@ export const MainView = () => {
         setUser(null);
         setToken(null);
         localStorage.removeItem("token"); // Remove the token from local storage (if stored there)
+        localStorage.removeItem("user"); // Remove the user from local storage (if stored there)
     };
 
     return (
@@ -93,6 +94,20 @@ export const MainView = () => {
                                     )}
                                 </>
 
+                            }
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <>
+                                    {!user ? (
+                                        <Navigate to="/login" replace />
+                                    ) : (
+                                        <Col md={8}>
+                                            <UserProfile user={user} /> {/* Pass user to profile */}
+                                        </Col>
+                                    )}
+                                </>
                             }
                         />
                         <Route
