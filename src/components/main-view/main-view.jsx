@@ -57,7 +57,48 @@ export const MainView = () => {
         localStorage.removeItem("token"); // Remove the token from local storage (if stored there)
         localStorage.removeItem("user"); // Remove the user from local storage (if stored there)
     };
+    const handleAddToFavorites = (movie) => {
+        if (!user) return; // Ensure the user is logged in
 
+        // Prevent adding a movie that's already in the favorites list
+        if (user.favorites.includes(movie.id)) {
+            console.log("Movie is already in favorites.");
+            return;
+        }
+        const updatedFavorites = [...user.favorites, movie.id];
+
+        // Update the user locally first
+        const updatedUser = { ...user, favorites: updatedFavorites };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        // URL encode the movie title
+        const encodedMovieTitle = encodeURIComponent(movie.title);
+        // Send the updated favorites list to the backend
+        fetch(`https://movie-flix19-efb939257bd3.herokuapp.com/users/${user.username}/favorites/${encodedMovieTitle}`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ favorites: updatedFavorites }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Failed to update favorites on the server.");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Favorites updated:", data);
+            })
+            .catch((error) => {
+                console.error("Error updating favorites:", error);
+                // Optionally, revert the local state change if the update fails
+                const revertedFavorites = user.favorites;
+                setUser({ ...user, favorites: revertedFavorites });
+                localStorage.setItem("user", JSON.stringify(user));
+            });
+    };
     return (
         <Container>
             <BrowserRouter>
@@ -89,7 +130,10 @@ export const MainView = () => {
                                         <Navigate to="/" />
                                     ) : (
                                         <Col md={5}>
-                                            <LoginView onLoggedIn={(user) => setUser(user)} />
+                                            <LoginView onLoggedIn={(user, token) => {
+                                                setUser(user);
+                                                setToken(token);
+                                            }} />
                                         </Col>
                                     )}
                                 </>
@@ -104,7 +148,7 @@ export const MainView = () => {
                                         <Navigate to="/login" replace />
                                     ) : (
                                         <Col md={8}>
-                                            <UserProfile user={user} movies={movies} /> {/* Pass movies data to UserProfile */}
+                                            <UserProfile user={user} movies={movies} handleLogout={handleLogout} /> {/* Pass movies data to UserProfile */}
                                         </Col>
                                     )}
                                 </>
@@ -138,7 +182,7 @@ export const MainView = () => {
                                         <>
                                             {movies.map((movie) => (
                                                 <Col className="mb-4" key={movie.id} md={3}>
-                                                    <MovieCard movie={movie} />
+                                                    <MovieCard movie={movie} onAddToFavorites={handleAddToFavorites} />
                                                 </Col>
 
                                             ))}

@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-export const MovieCard = ({ movie }) => {
+export const MovieCard = ({ movie, onAddToFavorites }) => {
+    const handleAddToFavorites = () => {
+        onAddToFavorites(movie); // Trigger the function passed down to parent
+    };
     return (
 
         <Card className="h-100">
@@ -14,6 +17,14 @@ export const MovieCard = ({ movie }) => {
                 <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
                     <Button variant="link">Open</Button>
                 </Link>
+                {/* Add to Favorites Button */}
+                <Button
+                    variant="primary"
+                    className="mt-2"
+                    onClick={handleAddToFavorites}
+                >
+                    Add to Favorite
+                </Button>
             </Card.Body>
         </Card>
     );
@@ -38,4 +49,5 @@ MovieCard.propTypes = {
         }).isRequired,
         imagePath: PropTypes.string.isRequired
     }).isRequired,
+    onAddToFavorites: PropTypes.func.isRequired // This prop will be a function passed from parent
 };
