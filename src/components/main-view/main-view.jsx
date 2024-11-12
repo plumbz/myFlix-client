@@ -104,7 +104,7 @@ export const MainView = () => {
                                         <Navigate to="/login" replace />
                                     ) : (
                                         <Col md={8}>
-                                            <UserProfile user={user} /> {/* Pass user to profile */}
+                                            <UserProfile user={user} movies={movies} /> {/* Pass movies data to UserProfile */}
                                         </Col>
                                     )}
                                 </>

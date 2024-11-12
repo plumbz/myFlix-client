@@ -1,13 +1,18 @@
 // UserProfile.js
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { UserInfo } from "./user-info";
 
-export const UserProfile = ({ user }) => {
+export const UserProfile = ({ user, movies }) => {
     const [userData, setUserData] = useState(user); // Use the passed `user` prop directly
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // Filter favorite movies from the movies prop
+    const favoriteMovies = movies.filter((movie) =>
+        userData.favorites.includes(movie.id)
+    );
     // Optionally, fetch the user data again in case it's updated after login.
     useEffect(() => {
         if (!user) return; // Don't fetch if there's no user
@@ -59,12 +64,23 @@ export const UserProfile = ({ user }) => {
                         <UserInfo name={userData.username} email={userData.email} />
                         {userData.favorites && userData.favorites.length > 0 && (
                             <div>
-                                <h5>Favorites:</h5>
-                                <ul>
-                                    {userData.favorites.map((movie, index) => (
-                                        <li key={index}>{movie}</li> // Assuming the favorites are movie names/IDs
-                                    ))}
-                                </ul>
+                                <h5>Favorite Movies:</h5>
+                                <Row>
+                                    {favoriteMovies.length > 0 ? (
+                                        favoriteMovies.map((movies) => {
+                                            return (
+                                                <div key={movies.id}>
+                                                    <img src={movies.imagePath} />
+                                                    <Link to={`/movies/${encodeURIComponent(movies.id)}`}>
+                                                        <h4>{movies.title}</h4>
+                                                    </Link>
+                                                </div>
+                                            )
+                                        })
+                                    ) : (
+                                        <p>No favorite movies found.</p>
+                                    )}
+                                </Row>
                             </div>
                         )}
                     </div>
