@@ -1,6 +1,6 @@
 // UserProfile.js
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Spinner, Alert, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Card, Spinner, Alert, Button, Form } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import { UserInfo } from "./user-info";
 
@@ -196,38 +196,39 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
     return (
         <Container>
             <Row className="justify-content-center mt-4">
-                <Col md={6}>
-                    <h2>User Profile</h2>
-                    <div>
-                        <UserInfo name={userData.username} email={userData.email} />
-                        {userData.favorites && userData.favorites.length > 0 && (
-                            <div>
-                                <h5>Favorite Movies:</h5>
-                                <Row>
-                                    {favoriteMovies.length > 0 ? (
-                                        favoriteMovies.map((movie) => {
-                                            return (
-                                                <div key={movie.id}>
-                                                    <img src={movie.imagePath} />
-                                                    <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
-                                                        <h4>{movie.title}</h4>
-                                                    </Link>
-                                                    <Button
-                                                        variant="primary"
-                                                        className="mt-2"
-                                                        onClick={() => handleRemoveFromFavorites(movie.id, movie.title)}
-                                                    >
-                                                        Remove from Favorite
-                                                    </Button>
-                                                </div>
-                                            )
-                                        })
-                                    ) : (
-                                        <p>No favorite movies found.</p>
-                                    )}
-                                </Row>
-                            </div>
-                        )}
+                <Col xs={12} sm={4}>
+                    <Card>
+                        <Card.Body>
+                            <UserInfo name={userData.username} email={userData.email} />
+                            {userData.favorites && userData.favorites.length > 0 && (
+                                <div>
+                                    <h5>Favorite Movies:</h5>
+                                    <Row>
+                                        {favoriteMovies.length > 0 ? (
+                                            favoriteMovies.map((movie) => {
+                                                return (
+                                                    <div key={movie.id}>
+                                                        <img src={movie.imagePath} />
+                                                        <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+                                                            <h4>{movie.title}</h4>
+                                                        </Link>
+                                                        <Button
+                                                            variant="primary"
+                                                            className="mt-2"
+                                                            onClick={() => handleRemoveFromFavorites(movie.id, movie.title)}
+                                                        >
+                                                            Remove from Favorite
+                                                        </Button>
+                                                    </div>
+                                                )
+                                            })
+                                        ) : (
+                                            <p>No favorite movies found.</p>
+                                        )}
+                                    </Row>
+                                </div>
+                            )}
+                        </Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group controlId="email">
                                 <Form.Label>Email</Form.Label>
@@ -278,7 +279,6 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
                                     name="username"
                                     value={formData.username}
                                     onChange={handleChange}
-                                    disabled
                                 />
                             </Form.Group>
 
@@ -294,7 +294,7 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
                         >
                             {confirmDelete ? "Confirm Unregister" : "Unregister Account"}
                         </Button>
-                    </div>
+                    </Card>
                 </Col>
             </Row>
         </Container>
