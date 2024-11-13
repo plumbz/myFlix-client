@@ -22,6 +22,7 @@ export const MovieCard = ({ movie, onAddToFavorites }) => {
                     variant="primary"
                     className="mt-2"
                     onClick={handleAddToFavorites}
+
                 >
                     Add to Favorite
                 </Button>
