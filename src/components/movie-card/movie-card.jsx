@@ -9,8 +9,8 @@ export const MovieCard = ({ movie, onAddToFavorites }) => {
     };
     return (
 
-        <Card className="h-100">
-            <Card.Img variant="top" src={movie.imagePath} />
+        <Card style={{ color: 'white' }} className="h-100">
+            <Card.Img variant="top" src={movie.imagePath} className="movie-card-image" />
             <Card.Body>
                 <Card.Title>{movie.title}</Card.Title>
                 <Card.Text>{movie.director.name}</Card.Text>

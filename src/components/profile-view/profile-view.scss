@@ -1,0 +1,10 @@
+/* Use more specific selectors */
+.form-control,
+input.form-control,
+.form-label,
+textarea.form-control,
+select.form-control {
+    color: white !important;
+}
+
+@import '~bootstrap/scss/bootstrap.scss'

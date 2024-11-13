@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 export const NavigationBar = ({ user, onLoggedOut }) => {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="dark" data-bs-theme="dark" expand="lg" fixed="top">
             <Container>
                 <Navbar.Brand as={Link} to="/">
-                    Movies App
+                    MyFlix
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

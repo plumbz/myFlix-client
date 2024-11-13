@@ -1,8 +1,9 @@
 // UserProfile.js
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Spinner, Alert, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Card, CardGroup, Spinner, Alert, Button, Form } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import { UserInfo } from "./user-info";
+import "./profile-view.scss";
 
 export const UserProfile = ({ user, movies, handleLogout }) => {
     const [userData, setUserData] = useState(user); // Use the passed `user` prop directly
@@ -196,105 +197,110 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
     return (
         <Container>
             <Row className="justify-content-center mt-4">
-                <Col xs={12} sm={4}>
-                    <Card>
-                        <Card.Body>
-                            <UserInfo name={userData.username} email={userData.email} />
-                            {userData.favorites && userData.favorites.length > 0 && (
+                <Col md={5} sm={4}>
+                    <CardGroup>
+                        <Card>
+                            <Card.Body>
                                 <div>
-                                    <h5>Favorite Movies:</h5>
-                                    <Row>
-                                        {favoriteMovies.length > 0 ? (
-                                            favoriteMovies.map((movie) => {
-                                                return (
-                                                    <div key={movie.id}>
-                                                        <img src={movie.imagePath} />
-                                                        <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
-                                                            <h4>{movie.title}</h4>
-                                                        </Link>
-                                                        <Button
-                                                            variant="primary"
-                                                            className="mt-2"
-                                                            onClick={() => handleRemoveFromFavorites(movie.id, movie.title)}
-                                                        >
-                                                            Remove from Favorite
-                                                        </Button>
-                                                    </div>
-                                                )
-                                            })
-                                        ) : (
-                                            <p>No favorite movies found.</p>
-                                        )}
-                                    </Row>
+                                    <UserInfo name={userData.username} email={userData.email} />
+                                    {userData.favorites && userData.favorites.length > 0 && (
+                                        <div>
+                                            <h5>Favorite Movies:</h5>
+                                            <Row>
+                                                {favoriteMovies.length > 0 ? (
+                                                    favoriteMovies.map((movie) => {
+                                                        return (
+                                                            <div key={movie.id}>
+                                                                <img src={movie.imagePath} />
+                                                                <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+                                                                    <h4>{movie.title}</h4>
+                                                                </Link>
+                                                                <Button
+                                                                    variant="primary"
+                                                                    className="mt-2"
+                                                                    onClick={() => handleRemoveFromFavorites(movie.id, movie.title)}
+                                                                >
+                                                                    Remove from Favorite
+                                                                </Button>
+                                                            </div>
+                                                        )
+                                                    })
+                                                ) : (
+                                                    <p>No favorite movies found.</p>
+                                                )}
+                                            </Row>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </Card.Body>
-                        <Form onSubmit={handleSubmit}>
-                            <Form.Group controlId="email">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
+                            </Card.Body>
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Group controlId="email">
+                                    <Form.Label  >Email</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
 
-                            <Form.Group controlId="firstName">
-                                <Form.Label>First Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
+                                    />
+                                </Form.Group>
 
-                            <Form.Group controlId="lastName">
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
+                                <Form.Group controlId="firstName">
+                                    <Form.Label >First Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                            <Form.Group controlId="password">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
+                                <Form.Group controlId="lastName">
+                                    <Form.Label >Last Name</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
 
-                            <Form.Group controlId="username">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
+                                <Form.Group controlId="password">
+                                    <Form.Label >Password</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </Form.Group>
 
-                            <Button variant="primary" type="submit" disabled={loading}>
-                                {loading ? "Updating..." : "Update Profile"}
+                                <Form.Group controlId="username">
+                                    <Form.Label >Username</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+
+                                <Button variant="secondary" type="submit" disabled={loading}>
+                                    {loading ? "Updating..." : "Update Profile"}
+                                </Button>
+                            </Form>
+                            {/* Unregister Button */}
+                            <Button
+                                variant="secondary"
+                                className="mt-3"
+                                onClick={handleUnregister}
+                            >
+                                {confirmDelete ? "Confirm Unregister" : "Unregister Account"}
                             </Button>
-                        </Form>
-                        {/* Unregister Button */}
-                        <Button
-                            variant="danger"
-                            className="mt-3"
-                            onClick={handleUnregister}
-                        >
-                            {confirmDelete ? "Confirm Unregister" : "Unregister Account"}
-                        </Button>
-                    </Card>
+                        </Card>
+                    </CardGroup>
                 </Col>
             </Row>
         </Container>

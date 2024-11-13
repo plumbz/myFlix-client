@@ -9,7 +9,7 @@ export const MovieView = ({ movies }) => {
 
 
     return (
-        <div>
+        <div style={{ color: 'white' }}>
             <div>
                 <img className="w-100" src={movie.imagePath} alt={movie.title} /> {/* Adjusted to use imagePath */}
             </div>
