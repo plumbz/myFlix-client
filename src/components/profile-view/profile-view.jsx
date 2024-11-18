@@ -4,7 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import { UserInfo } from "./user-info";
 import "./profile-view.scss";
 
-export const UserProfile = ({ user, movies, handleLogout }) => {
+export const UserProfile = ({ user, movies, handleLogout, handleRemoveUpdate }) => {
     const [userData, setUserData] = useState(user);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -23,11 +23,7 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
         userData.favorites.includes(movie.id)
     );
 
-    useEffect(() => {
-        if (!user) return; // Don't fetch if there's no user
 
-        setLoading(false);
-    }, [user]);
 
     const handleRemoveFromFavorites = (movieId, movieTitle) => {
         if (!userData) {
@@ -36,8 +32,8 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
 
         const updatedFavorites = userData.favorites.filter(id => id !== movieId);
         const updatedUser = { ...userData, favorites: updatedFavorites };
-        setUserData(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        // setUserData(updatedUser);
+        // localStorage.setItem("user", JSON.stringify(updatedUser));
 
         fetch(`https://movie-flix19-efb939257bd3.herokuapp.com/users/${userData.username}/favorites/${encodeURIComponent(movieTitle)}`, {
             method: "DELETE",
@@ -49,6 +45,9 @@ export const UserProfile = ({ user, movies, handleLogout }) => {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Favorites updated:", data);
+                handleRemoveUpdate();
+                setUserData(updatedUser);
+                localStorage.setItem("user", JSON.stringify(updatedUser));
             })
             .catch((error) => {
                 console.error("Error updating favorites:", error);

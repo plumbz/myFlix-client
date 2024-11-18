@@ -17,6 +17,40 @@ export const MainView = () => {
     const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
+    const [triggerMe, setTriggerMe] = useState([]);
+
+    useEffect(() => {
+
+        if (!token) return; // Don't fetch if there's no user
+        console.log("this user is logged in");
+        console.log(user);
+        fetch(`https://movie-flix19-efb939257bd3.herokuapp.com/users`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch users');
+            }
+            return response.json();
+        })
+            .then((users) => {
+                // Find and return the user object matching the username
+                const loggedInUser = users.find(u => u.username === user.username);
+                console.log(users);
+                setUser(loggedInUser);
+                localStorage.setItem("user", JSON.stringify(loggedInUser));
+                if (!loggedInUser) {
+                    throw new Error('User not found');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching user data:', error);
+                throw error;
+            });
+    }, [triggerMe]);
 
     useEffect(() => {
         if (!token) {
@@ -50,7 +84,10 @@ export const MainView = () => {
                 setMovies(moviesFromApi);
             });
     }, [token]);
+    const handleRemoveUpdate = () => {
+        setTriggerMe(true);
 
+    };
     const handleLogout = () => {
         setUser(null);
         setToken(null);
@@ -148,7 +185,7 @@ export const MainView = () => {
                                         <Navigate to="/login" replace />
                                     ) : (
                                         <Col md={8}>
-                                            <UserProfile user={user} movies={movies} handleLogout={handleLogout} /> {/* Pass movies data to UserProfile */}
+                                            <UserProfile user={user} movies={movies} handleLogout={handleLogout} handleRemoveUpdate={handleRemoveUpdate} /> {/* Pass movies data to UserProfile */}
                                         </Col>
                                     )}
                                 </>
