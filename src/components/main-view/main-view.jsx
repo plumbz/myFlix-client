@@ -20,10 +20,8 @@ export const MainView = () => {
     const [triggerMe, setTriggerMe] = useState([]);
 
     useEffect(() => {
-
+        setTriggerMe(false);
         if (!token) return; // Don't fetch if there's no user
-        console.log("this user is logged in");
-        console.log(user);
         fetch(`https://movie-flix19-efb939257bd3.herokuapp.com/users`, {
             method: "GET",
             headers: {
@@ -39,7 +37,6 @@ export const MainView = () => {
             .then((users) => {
                 // Find and return the user object matching the username
                 const loggedInUser = users.find(u => u.username === user.username);
-                console.log(users);
                 setUser(loggedInUser);
                 localStorage.setItem("user", JSON.stringify(loggedInUser));
                 if (!loggedInUser) {
@@ -94,6 +91,33 @@ export const MainView = () => {
         localStorage.removeItem("token"); // Remove the token from local storage (if stored there)
         localStorage.removeItem("user"); // Remove the user from local storage (if stored there)
     };
+    const handleRemoveFromFavorites = (movie) => {
+        if (!user) {
+            return;
+        }
+
+        const updatedFavorites = user.favorites.filter(id => id !== movie._id);
+        const updatedUser = { ...user, favorites: updatedFavorites };
+        // setUserData(updatedUser);
+        // localStorage.setItem("user", JSON.stringify(updatedUser));
+
+        fetch(`https://movie-flix19-efb939257bd3.herokuapp.com/users/${user.username}/favorites/${encodeURIComponent(movie.title)}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                handleRemoveUpdate();
+                localStorage.setItem("user", JSON.stringify(updatedUser));
+            })
+            .catch((error) => {
+                console.error("Error updating favorites:", error);
+            });
+    };
+
     const handleAddToFavorites = (movie) => {
         if (!user) return; // Ensure the user is logged in
 
@@ -185,7 +209,7 @@ export const MainView = () => {
                                         <Navigate to="/login" replace />
                                     ) : (
                                         <Col md={8}>
-                                            <UserProfile user={user} movies={movies} handleLogout={handleLogout} handleRemoveUpdate={handleRemoveUpdate} /> {/* Pass movies data to UserProfile */}
+                                            <UserProfile user={user} movies={movies} handleLogout={handleLogout} onRemoveFromFavorites={handleRemoveFromFavorites} /> {/* Pass movies data to UserProfile */}
                                         </Col>
                                     )}
                                 </>
@@ -219,7 +243,7 @@ export const MainView = () => {
                                         <>
                                             {movies.map((movie) => (
                                                 <Col className="mb-4" key={movie.id} md={3}>
-                                                    <MovieCard movie={movie} onAddToFavorites={handleAddToFavorites} />
+                                                    <MovieCard user={user} onRemoveFromFavorites={handleRemoveFromFavorites} movie={movie} onAddToFavorites={handleAddToFavorites} />
                                                 </Col>
 
                                             ))}

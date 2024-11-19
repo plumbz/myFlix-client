@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-export const MovieCard = ({ movie, onAddToFavorites }) => {
+export const MovieCard = ({ movie, onAddToFavorites, onRemoveFromFavorites, user }) => {
+    const isFavorite = user.favorites.includes(movie.id);
+    const handleRemoveFromFavorites = () => {
+        onRemoveFromFavorites(movie); // Trigger the function passed down to parent
+    };
     const handleAddToFavorites = () => {
         onAddToFavorites(movie); // Trigger the function passed down to parent
     };
@@ -21,10 +25,15 @@ export const MovieCard = ({ movie, onAddToFavorites }) => {
                 <Button
                     variant="primary"
                     className="mt-2"
-                    onClick={handleAddToFavorites}
-
+                    onClick={() => {
+                        if (isFavorite) {
+                            handleRemoveFromFavorites(); // Call remove from favorites
+                        } else {
+                            handleAddToFavorites(); // Call add to favorites
+                        }
+                    }}
                 >
-                    Add to Favorite
+                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                 </Button>
             </Card.Body>
         </Card>

@@ -4,7 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import { UserInfo } from "./user-info";
 import "./profile-view.scss";
 
-export const UserProfile = ({ user, movies, handleLogout, handleRemoveUpdate }) => {
+export const UserProfile = ({ user, movies, handleLogout, onRemoveFromFavorites }) => {
     const [userData, setUserData] = useState(user);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -23,35 +23,15 @@ export const UserProfile = ({ user, movies, handleLogout, handleRemoveUpdate }) 
         userData.favorites.includes(movie.id)
     );
 
-
-
-    const handleRemoveFromFavorites = (movieId, movieTitle) => {
+    const handleRemoveFromFavorites = (movie) => {
         if (!userData) {
             return;
         }
 
-        const updatedFavorites = userData.favorites.filter(id => id !== movieId);
+        const updatedFavorites = userData.favorites.filter(id => id !== movie.id);
         const updatedUser = { ...userData, favorites: updatedFavorites };
-        // setUserData(updatedUser);
-        // localStorage.setItem("user", JSON.stringify(updatedUser));
-
-        fetch(`https://movie-flix19-efb939257bd3.herokuapp.com/users/${userData.username}/favorites/${encodeURIComponent(movieTitle)}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-            }
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Favorites updated:", data);
-                handleRemoveUpdate();
-                setUserData(updatedUser);
-                localStorage.setItem("user", JSON.stringify(updatedUser));
-            })
-            .catch((error) => {
-                console.error("Error updating favorites:", error);
-            });
+        setUserData(updatedUser);
+        onRemoveFromFavorites(movie);
     };
 
     if (loading) {
@@ -256,7 +236,7 @@ export const UserProfile = ({ user, movies, handleLogout, handleRemoveUpdate }) 
                                                 <Button
                                                     variant="secondary"
                                                     className="mt-2"
-                                                    onClick={() => handleRemoveFromFavorites(movie.id, movie.title)}
+                                                    onClick={() => handleRemoveFromFavorites(movie)}
                                                 >
                                                     Remove from Favorite
                                                 </Button>
