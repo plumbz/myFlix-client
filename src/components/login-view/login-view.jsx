@@ -15,7 +15,6 @@ export const LoginView = ({ onLoggedIn }) => {
             password: password
         };
 
-        console.log(data);
         fetch("https://movie-flix19-efb939257bd3.herokuapp.com/login", {
             method: "POST",
             body: JSON.stringify(data),
@@ -29,6 +28,7 @@ export const LoginView = ({ onLoggedIn }) => {
                 if (data.user) {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
+
                     onLoggedIn(data.user, data.token);
                 } else {
                     alert("No such user");

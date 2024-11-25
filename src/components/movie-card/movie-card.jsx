@@ -1,21 +1,45 @@
+import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-export const MovieCard = ({ movie, onMovieClick }) => {
+export const MovieCard = ({ movie, onAddToFavorites, onRemoveFromFavorites, user }) => {
+    const isFavorite = user.favorites.includes(movie.id);
+    const handleRemoveFromFavorites = () => {
+        onRemoveFromFavorites(movie); // Trigger the function passed down to parent
+    };
+    const handleAddToFavorites = () => {
+        onAddToFavorites(movie); // Trigger the function passed down to parent
+    };
     return (
 
-        <Card className="h-100">
-            <Card.Img variant="top" src={movie.imagePath} />
+        <Card style={{ color: 'white' }} className="h-100">
+            <Card.Img variant="top" src={movie.imagePath} className="movie-card-image" />
             <Card.Body>
                 <Card.Title>{movie.title}</Card.Title>
                 <Card.Text>{movie.director.name}</Card.Text>
-                <Button onClick={() => onMovieClick(movie)} variant="link">
-                    Open
+                <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+                    <Button variant="link">Open</Button>
+                </Link>
+                {/* Add to Favorites Button */}
+                <Button
+                    variant="primary"
+                    className="mt-2"
+                    onClick={() => {
+                        if (isFavorite) {
+                            handleRemoveFromFavorites(); // Call remove from favorites
+                        } else {
+                            handleAddToFavorites(); // Call add to favorites
+                        }
+                    }}
+                >
+                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                 </Button>
             </Card.Body>
         </Card>
     );
 };
+
 
 // Here is where we define all the props constraints for the MovieCard
 MovieCard.propTypes = {
@@ -35,5 +59,5 @@ MovieCard.propTypes = {
         }).isRequired,
         imagePath: PropTypes.string.isRequired
     }).isRequired,
-    onMovieClick: PropTypes.func.isRequired
+    onAddToFavorites: PropTypes.func.isRequired // This prop will be a function passed from parent
 };

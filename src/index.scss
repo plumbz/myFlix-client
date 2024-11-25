@@ -1,5 +1,18 @@
-$primary: SeaGreen;
-$body-bg: Honeydew;
+$primary: rgb(160, 182, 169);
+$body-bg: rgb(94, 96, 94);
 
+body {
+    padding-top: 60px;
+    /* Adjust to match the height of your navbar */
+}
 
-@import '~bootstrap/scss/bootstrap.scss';
+.movie-card-image {
+    width: 100%;
+    /* Ensures the image fills the card width */
+    height: 400px;
+    /* Fixed height for all images */
+    object-fit: cover;
+    /* Ensures the image fills the container without stretching */
+}
+
+@import 'bootstrap/scss/bootstrap.scss';
