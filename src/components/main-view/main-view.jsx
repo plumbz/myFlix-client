@@ -234,7 +234,7 @@ export const MainView = () => {
                                         <Col>The list is empty!</Col>
                                     ) : (
                                         <Col md={8}>
-                                            <MovieView movies={movies} />
+                                            <MovieView movies={movies} user={user} onRemoveFromFavorites={handleRemoveFromFavorites} onAddToFavorites={handleAddToFavorites} />
                                         </Col>
                                     )}
                                 </>
@@ -251,7 +251,7 @@ export const MainView = () => {
                                     ) : (
                                         <>
                                             {/* New Row for Search Input */}
-                                            <Row className="justify-content-left mb-3">
+                                            <Row className="justify-content-end mb-3">
                                                 <Col xs={12} sm={4} md={2}>
                                                     <input
                                                         type="text"
@@ -262,9 +262,10 @@ export const MainView = () => {
                                                             width: "150%",
                                                             padding: "8px",
                                                             fontSize: "16px",
-
                                                         }}
+
                                                     />
+
                                                 </Col>
                                             </Row>
 
