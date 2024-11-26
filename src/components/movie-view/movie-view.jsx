@@ -1,11 +1,19 @@
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 import "./movie-view.scss";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, onAddToFavorites, onRemoveFromFavorites, user }) => {
     const { movieId } = useParams();
 
     const movie = movies.find((m) => m.id === movieId);
+    const isFavorite = user.favorites.includes(movie.id);
+    const handleRemoveFromFavorites = () => {
+        onRemoveFromFavorites(movie); // Trigger the function passed down to parent
+    };
+    const handleAddToFavorites = () => {
+        onAddToFavorites(movie); // Trigger the function passed down to parent
+    };
 
 
     return (
@@ -39,6 +47,24 @@ export const MovieView = ({ movies }) => {
             <Link to={`/`}>
                 <button className="back-button">Back</button>
             </Link>
+            <div className="flex-grow-1"></div> {/* This makes the remaining space grow */}
+
+            {/* Align Button to the Right */}
+            <div className="d-flex justify-content-end mb-3">
+                <Button
+                    variant="primary"
+                    className="justify-content-md-center"
+                    onClick={() => {
+                        if (isFavorite) {
+                            handleRemoveFromFavorites(); // Call remove from favorites
+                        } else {
+                            handleAddToFavorites(); // Call add to favorites
+                        }
+                    }}
+                >
+                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+                </Button>
+            </div>
         </div>
     );
 };

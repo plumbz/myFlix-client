@@ -18,6 +18,7 @@ export const MainView = () => {
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [triggerMe, setTriggerMe] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         setTriggerMe(false);
@@ -81,6 +82,15 @@ export const MainView = () => {
                 setMovies(moviesFromApi);
             });
     }, [token]);
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value); // Update search query state
+    };
+    // Filter movies based on search query (title or genre)
+    const filteredMovies = movies.filter(movie => {
+        return movie.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            movie.genre.name.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+
     const handleRemoveUpdate = () => {
         setTriggerMe(true);
 
@@ -164,9 +174,8 @@ export const MainView = () => {
         <Container>
             <BrowserRouter>
                 <NavigationBar user={user} onLoggedOut={handleLogout} /> {/* Render NavigationBar here */}
-
-
                 <Row className="justify-content-md-center">
+
                     <Routes>
                         <Route
                             path="/signup"
@@ -225,7 +234,7 @@ export const MainView = () => {
                                         <Col>The list is empty!</Col>
                                     ) : (
                                         <Col md={8}>
-                                            <MovieView movies={movies} />
+                                            <MovieView movies={movies} user={user} onRemoveFromFavorites={handleRemoveFromFavorites} onAddToFavorites={handleAddToFavorites} />
                                         </Col>
                                     )}
                                 </>
@@ -241,12 +250,35 @@ export const MainView = () => {
                                         <Col>The list is empty!</Col>
                                     ) : (
                                         <>
-                                            {movies.map((movie) => (
-                                                <Col className="mb-4" key={movie.id} md={3}>
-                                                    <MovieCard user={user} onRemoveFromFavorites={handleRemoveFromFavorites} movie={movie} onAddToFavorites={handleAddToFavorites} />
-                                                </Col>
+                                            {/* New Row for Search Input */}
+                                            <Row className="justify-content-end mb-3">
+                                                <Col xs={12} sm={4} md={2}>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Search by title or genre"
+                                                        value={searchQuery}
+                                                        onChange={handleSearchChange} // Update the search query state
+                                                        style={{
+                                                            width: "150%",
+                                                            padding: "8px",
+                                                            fontSize: "16px",
+                                                        }}
 
-                                            ))}
+                                                    />
+
+                                                </Col>
+                                            </Row>
+
+                                            {/* Display filtered movies */}
+                                            {filteredMovies.length > 0 ? (
+                                                filteredMovies.map((movie) => (
+                                                    <Col className="mb-4" key={movie.id} md={3}>
+                                                        <MovieCard user={user} onRemoveFromFavorites={handleRemoveFromFavorites} movie={movie} onAddToFavorites={handleAddToFavorites} />
+                                                    </Col>
+                                                ))
+                                            ) : (
+                                                <Col>No movies found matching your search</Col>
+                                            )}
                                         </>
                                     )}
                                 </>
