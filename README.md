@@ -1,13 +1,12 @@
-myFlix-client App
+## myFlix-client App
+myFlix-client is a web application build using React. This application allows users to browse, search, and explore details about movies, directors, and genres, with additional functionalities for user account management and personalization.
 
-Objective
+## Objective
 Using React, build the client-side for an app called myFlix based on its
 existing server-side code (REST API and database).
 
-Project Description:
-myFlix-client is a web application build using React. This application allows users to browse, search, and explore details about movies, directors, and genres, with additional functionalities for user account management and personalization.
 
-Key Features:
+## Key Features:
 Main view
 ● Returns ALL movies to the user (each movie item with an image, title, and description)
 ● Filtering the list of movies with a “search” feature
@@ -33,20 +32,23 @@ Profile view
 ● Allows users to remove a movie from their list of favorites
 ● Allows existing users to unregister
 
-Technology Used
+## Technology Used
     React - For building the user interface.
     Vite - For bundling and serving the app. (replaces Parcel)
     Sass - For custom styles.
     Bootstrap- for styling
- 
-Installation
+---
+
+## Installation
 
 Prerequisites
 ● Node.js
 
 Steps
-1. Clone the respository
-
+   ```bash
+ git clone https://github.com/kittykatkaro/myFLix-client.git
+   cd myFLix-client
+   ```
 2. Install the right dependencies:
 npm install -vite
 npm install --save react react-dom
@@ -62,3 +64,20 @@ myFlix-client/src/index.html
 
 4.Building an App buy installing the following:
 npm run dev/ nmp run build
+
+---
+## Usage
+
+- **Register:** Sign up with a new account.
+- **Login:** Log in with your username and password.
+- **Browse:** Browse the movie collection and click on any movie to view details.
+- **Manage Favorites:** Use the heart icon to add/remove movies from your favorites list.
+- **Profile:** Update your user information and view your favorite movies. 
+- Open the app in a browser at `http://localhost:1234/`.
+- Register for a new account or log in with existing credentials.
+- Browse the list of movies and view details about genres and directors.
+- Use the "Add to Favorites" button to manage your favorite movies.
+- Access your profile to update personal information or deregister your account.
+
+---
+myFLix API Repository: https://github.com/plumbz/movie-api
