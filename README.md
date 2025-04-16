@@ -46,7 +46,7 @@ Prerequisites
 
 Steps
    ```bash
- git clone https://github.com/kittykatkaro/myFLix-client.git
+ git clone https://github.com/plumbz/myFLix-client.git
    cd myFLix-client
    ```
 2. Install the right dependencies:
